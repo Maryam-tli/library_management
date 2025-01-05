@@ -62,3 +62,18 @@ class TestLibraryManagement(unittest.TestCase):
         book = cursor.fetchone()
         conn.close()
         self.assertIsNone(book, "Book should be removed from the database.")
+
+    @patch('tkinter.simple dialog.askstring', return_value="Book1")
+    def test_search_books(self, mock_askstring):
+        """Test searching books."""
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO books (title, author, year) VALUES ('Book1', 'Author1', 2021)")
+        conn.commit()
+        conn.close()
+
+        with patch('tkinter.messagebox.showinfo') as mock_messagebox:
+            search_books(self.test_db)
+            mock_messagebox.assert_called_with(
+                "Search Results", "ID: 1, Title: Book1, Author: Author1, Year: 2021"
+            )
