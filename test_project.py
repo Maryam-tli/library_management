@@ -77,3 +77,26 @@ class TestLibraryManagement(unittest.TestCase):
             mock_messagebox.assert_called_with(
                 "Search Results", "ID: 1, Title: Book1, Author: Author1, Year: 2021"
             )
+
+    @patch('tkinter.simple dialog.askinteger', side_effect=[1, 2022])
+    @patch('tkinter.simple dialog.askstring', side_effect=["Updated Book", "Updated Author"])
+    def test_update_book(self, mock_askstring, mock_askinteger):
+        """Test updating a book."""
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO books (title, author, year) VALUES ('Book1', 'Author1', 2021)")
+        conn.commit()
+        conn.close()
+
+        update_book(self.test_db)
+
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM books WHERE id=1")
+        book = cursor.fetchone()
+        conn.close()
+
+        # Assertions for updated book
+        self.assertEqual(book[1], "Updated Book", "Book title should be updated.")
+        self.assertEqual(book[2], "Updated Author", "Book author should be updated.")
+        self.assertEqual(book[3], 2022, "Book year should be updated.")
