@@ -32,3 +32,15 @@ class TestLibraryManagement(unittest.TestCase):
         table_exists = cursor.fetchone()
         conn.close()
         self.assertIsNotNone(table_exists, "Table 'books' should exist.")
+
+    @patch('tkinter.simple dialog.askstring', side_effect=["Test Book", "Test Author"])
+    @patch('tkinter.simple dialog.askinteger', return_value=2021)
+    def test_add_book(self, mock_askinteger, mock_askstring):
+        """Test adding a book."""
+        add_book(self.test_db)
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM books WHERE title='Test Book'")
+        book = cursor.fetchone()
+        conn.close()
+        self.assertIsNotNone(book, "Book should be added to the database.")
