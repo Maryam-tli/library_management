@@ -100,3 +100,25 @@ class TestLibraryManagement(unittest.TestCase):
         self.assertEqual(book[1], "Updated Book", "Book title should be updated.")
         self.assertEqual(book[2], "Updated Author", "Book author should be updated.")
         self.assertEqual(book[3], 2022, "Book year should be updated.")
+
+    def test_generate_report(self):
+        """Test generating report."""
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.executemany(
+            "INSERT INTO books (title, author, year) VALUES (?, ?, ?)",
+            [
+                ('Book1', 'Author1', 2021),
+                ('Book2', 'Author1', 2022),
+                ('Book3', 'Author2', 2021),
+            ],
+        )
+        conn.commit()
+        conn.close()
+
+        with patch('tkinter.messagebox.showinfo') as mock_messagebox:
+            generate_report(self.test_db)
+            report = (
+                "Total books: 3\n\nBooks by Author:\nAuthor1: 2\nAuthor2: 1\n\nBooks by Year:\n2021: 2\n2022: 1\n"
+            )
+            mock_messagebox.assert_called_with("Library Report", report)
