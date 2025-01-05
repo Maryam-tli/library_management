@@ -44,3 +44,21 @@ class TestLibraryManagement(unittest.TestCase):
         book = cursor.fetchone()
         conn.close()
         self.assertIsNotNone(book, "Book should be added to the database.")
+
+    @patch('tkinter.simple dialog.askinteger', return_value=1)
+    def test_remove_book(self, mock_askinteger):
+        """Test removing a book."""
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO books (title, author, year) VALUES ('Book1', 'Author1', 2021)")
+        conn.commit()
+        conn.close()
+
+        remove_book(self.test_db)
+
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM books WHERE id=1")
+        book = cursor.fetchone()
+        conn.close()
+        self.assertIsNone(book, "Book should be removed from the database.")
