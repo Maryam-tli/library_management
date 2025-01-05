@@ -68,3 +68,22 @@ def remove_book(db_path="library.db"):
     conn.close()
 
     messagebox.showinfo("Success", f"Book with ID {book_id} removed successfully.")
+
+
+def search_books(db_path="library.db"):
+    """Search for books by title or author."""
+    query = simpledialog.askstring("Search Books", "Enter the title or author to search for:")
+    if not query:
+        return
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM books WHERE title LIKE ? OR author LIKE ?", (f"%{query}%", f"%{query}%"))
+    results = cursor.fetchall()
+    conn.close()
+
+    if results:
+        books = "\n".join([f"ID: {row[0]}, Title: {row[1]}, Author: {row[2]}, Year: {row[3]}" for row in results])
+        messagebox.showinfo("Search Results", books)
+    else:
+        messagebox.showinfo("Search Results", "No books found matching the query.")
