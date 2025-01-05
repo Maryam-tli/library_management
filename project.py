@@ -53,3 +53,18 @@ def display_books(db_path="library.db"):
         messagebox.showinfo("Library Collection", books)
     else:
         messagebox.showinfo("Library Collection", "The library is empty.")
+
+
+def remove_book(db_path="library.db"):
+    """Remove a book from the database."""
+    book_id = simpledialog.askinteger("Remove Book", "Enter the ID of the book to remove:")
+    if not book_id:
+        return
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
+    conn.commit()
+    conn.close()
+
+    messagebox.showinfo("Success", f"Book with ID {book_id} removed successfully.")
