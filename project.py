@@ -139,3 +139,21 @@ def generate_report(db_path="library.db"):
         report += f"{year}: {count}\n"
 
     messagebox.showinfo("Library Report", report)
+
+
+def main():
+    db_path = "library.db"  # Change this path for testing if needed
+    initialize_database(db_path)
+
+    root = tk.Tk()
+    root.title("Library Management System")
+
+    tk.Button(root, text="Add Book", command=lambda: add_book(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Display Books", command=lambda: display_books(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Remove Book", command=lambda: remove_book(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Search Books", command=lambda: search_books(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Update Book", command=lambda: update_book(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Generate Report", command=lambda: generate_report(db_path), width=20).pack(pady=5)
+    tk.Button(root, text="Exit", command=root.quit, width=20).pack(pady=5)
+
+    root.mainloop()
