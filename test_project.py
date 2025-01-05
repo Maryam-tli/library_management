@@ -33,8 +33,8 @@ class TestLibraryManagement(unittest.TestCase):
         conn.close()
         self.assertIsNotNone(table_exists, "Table 'books' should exist.")
 
-    @patch('tkinter.simple dialog.askstring', side_effect=["Test Book", "Test Author"])
-    @patch('tkinter.simple dialog.askinteger', return_value=2021)
+    @patch('tkinter.simpledialog.askstring', side_effect=["Test Book", "Test Author"])
+    @patch('tkinter.simpledialog.askinteger', return_value=2021)
     def test_add_book(self, mock_askinteger, mock_askstring):
         """Test adding a book."""
         add_book(self.test_db)
@@ -45,7 +45,7 @@ class TestLibraryManagement(unittest.TestCase):
         conn.close()
         self.assertIsNotNone(book, "Book should be added to the database.")
 
-    @patch('tkinter.simple dialog.askinteger', return_value=1)
+    @patch('tkinter.simpledialog.askinteger', return_value=1)
     def test_remove_book(self, mock_askinteger):
         """Test removing a book."""
         conn = sqlite3.connect(self.test_db)
@@ -63,7 +63,7 @@ class TestLibraryManagement(unittest.TestCase):
         conn.close()
         self.assertIsNone(book, "Book should be removed from the database.")
 
-    @patch('tkinter.simple dialog.askstring', return_value="Book1")
+    @patch('tkinter.simpledialog.askstring', return_value="Book1")
     def test_search_books(self, mock_askstring):
         """Test searching books."""
         conn = sqlite3.connect(self.test_db)
@@ -78,8 +78,8 @@ class TestLibraryManagement(unittest.TestCase):
                 "Search Results", "ID: 1, Title: Book1, Author: Author1, Year: 2021"
             )
 
-    @patch('tkinter.simple dialog.askinteger', side_effect=[1, 2022])
-    @patch('tkinter.simple dialog.askstring', side_effect=["Updated Book", "Updated Author"])
+    @patch('tkinter.simpledialog.askinteger', side_effect=[1, 2022])
+    @patch('tkinter.simpledialog.askstring', side_effect=["Updated Book", "Updated Author"])
     def test_update_book(self, mock_askstring, mock_askinteger):
         """Test updating a book."""
         conn = sqlite3.connect(self.test_db)
@@ -136,3 +136,7 @@ class TestLibraryManagement(unittest.TestCase):
             mock_messagebox.assert_called_with(
                 "Library Collection", "ID: 1, Title: Book1, Author: Author1, Year: 2021"
             )
+
+
+if __name__ == "__main__":
+    unittest.main()
