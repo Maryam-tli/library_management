@@ -11,3 +11,15 @@ from project import (
     update_book,
     generate_report,
 )
+
+
+class TestLibraryManagement(unittest.TestCase):
+    def setUp(self):
+        """set up a temporary database for testing."""
+        self.test_db = "test_library.db"
+        initialize_database(self.test_db)
+
+    def tearDown(self):
+        """Remove the temporary database after tests."""
+        if os.path.exists(self.test_db):
+            os.remove(self.test_db)
