@@ -17,3 +17,24 @@ def initialize_database(db_path="library.db"):
     """)
     conn.commit()
     conn.close()
+
+
+def add_book(db_path="library.db"):
+    """Add a new book to the database."""
+    title = simpledialog.askstring("Add Book", "Enter the book title:")
+    if not title:
+        return
+    author = simpledialog.askstring("Add Book", "Enter the author:")
+    if not author:
+        return
+    year = simpledialog.askinteger("Add Book", "Enter the year of publication:")
+    if not year:
+        return
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO books (title, author, year) VALUES (?, ?, ?)", (title, author, year))
+    conn.commit()
+    conn.close()
+
+    messagebox.showinfo("Success", f"Book '{title}' added successfully.")
