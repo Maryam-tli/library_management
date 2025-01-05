@@ -157,3 +157,7 @@ def main():
     tk.Button(root, text="Exit", command=root.quit, width=20).pack(pady=5)
 
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
