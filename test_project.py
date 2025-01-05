@@ -122,3 +122,17 @@ class TestLibraryManagement(unittest.TestCase):
                 "Total books: 3\n\nBooks by Author:\nAuthor1: 2\nAuthor2: 1\n\nBooks by Year:\n2021: 2\n2022: 1\n"
             )
             mock_messagebox.assert_called_with("Library Report", report)
+
+    def test_display_books(self):
+        """Test displaying books."""
+        conn = sqlite3.connect(self.test_db)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO books (title, author, year) VALUES ('Book1', 'Author1', 2021)")
+        conn.commit()
+        conn.close()
+
+        with patch('tkinter.messagebox.showinfo') as mock_messagebox:
+            display_books(self.test_db)
+            mock_messagebox.assert_called_with(
+                "Library Collection", "ID: 1, Title: Book1, Author: Author1, Year: 2021"
+            )
