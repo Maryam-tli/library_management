@@ -38,3 +38,18 @@ def add_book(db_path="library.db"):
     conn.close()
 
     messagebox.showinfo("Success", f"Book '{title}' added successfully.")
+
+
+def display_books(db_path="library.db"):
+    """Display all books in the database."""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM books")
+    results = cursor.fetchall()
+    conn.close()
+
+    if results:
+        books = "\n".join([f"ID: {row[0]}, Title: {row[1]}, Author: {row[2]}, Year: {row[3]}" for row in results])
+        messagebox.showinfo("Library Collection", books)
+    else:
+        messagebox.showinfo("Library Collection", "The library is empty.")
