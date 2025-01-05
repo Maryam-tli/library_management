@@ -87,3 +87,29 @@ def search_books(db_path="library.db"):
         messagebox.showinfo("Search Results", books)
     else:
         messagebox.showinfo("Search Results", "No books found matching the query.")
+
+
+def update_book(db_path="library.db"):
+    """Update an existing book's information."""
+    book_id = simpledialog.askinteger("Update Book", "Enter the ID of the book to update:")
+    if not book_id:
+        return
+
+    new_title = simpledialog.askstring("Update Book", "Enter the new title (leave blank to keep current):")
+    new_author = simpledialog.askstring("Update Book", "Enter the new author (leave blank to keep current):")
+    new_year = simpledialog.askinteger("Update Book", "Enter the new year (leave blank to keep current):")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    if new_title:
+        cursor.execute("UPDATE books SET title = ? WHERE id = ?", (new_title, book_id))
+    if new_author:
+        cursor.execute("UPDATE books SET author = ? WHERE id = ?", (new_author, book_id))
+    if new_year:
+        cursor.execute("UPDATE books SET year = ? WHERE id = ?", (new_year, book_id))
+
+    conn.commit()
+    conn.close()
+
+    messagebox.showinfo("Success", f"Book with ID {book_id} updated successfully.")
