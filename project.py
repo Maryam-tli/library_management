@@ -113,3 +113,29 @@ def update_book(db_path="library.db"):
     conn.close()
 
     messagebox.showinfo("Success", f"Book with ID {book_id} updated successfully.")
+
+
+def generate_report(db_path="library.db"):
+    """Generate a report of the library's content."""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM books")
+    total_books = cursor.fetchone()[0]
+
+    cursor.execute("SELECT author, COUNT(*) FROM books GROUP BY author")
+    books_by_author = cursor.fetchall()
+
+    cursor.execute("SELECT year, COUNT(*) FROM books GROUP BY year")
+    books_by_year = cursor.fetchall()
+
+    conn.close()
+
+    report = f"Total books: {total_books}\n\nBooks by Author:\n"
+    for author, count in books_by_author:
+        report += f"{author}: {count}\n"
+    report += "\nBooks by Year:\n"
+    for year, count in books_by_year:
+        report += f"{year}: {count}\n"
+
+    messagebox.showinfo("Library Report", report)
